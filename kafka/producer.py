@@ -9,7 +9,7 @@ def create_producer():
     while True:
         try:
             print("⏳ Trying to connect to Kafka...", flush=True)
-            producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
+            producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
             print("✅ Connected to Kafka.", flush=True)
             return producer
         except Exception as e:
