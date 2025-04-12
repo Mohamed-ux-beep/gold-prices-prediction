@@ -8,11 +8,12 @@ from datetime import datetime
 def create_producer():
     while True:
         try:
+            print("⏳ Trying to connect to Kafka...", flush=True)
             producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
-            print("✅ Connected to Kafka.")
+            print("✅ Connected to Kafka.", flush=True)
             return producer
         except Exception as e:
-            print(f"❌ Kafka not ready, retrying in 5s... ({e})")
+            print(f"❌ Kafka not ready, retrying in 5s... ({e})", flush=True)
             time.sleep(5)
 
 
@@ -28,23 +29,29 @@ def fetch_gold_price():
         
         if price_span: 
             price_text = price_span.text.strip().replace(".", "").replace(",",".")
+            print(f"💰 Fetched gold price: {price_text} EUR", flush=True)
             return float(price_text)
-    except:
-        return None
+    except Exception as e:
+        print(f"❌ Error fetching gold price: {e}", flush=True)
 
     return None
 
 producer = create_producer()
 
 while True:
-       price = fetch_gold_price()
+    price = fetch_gold_price()
     if price:
         message = {
                     "timestamp": datetime.utcnow().isoformat(),
                     "price_eur": price
                 }
-        producer.send("gold_prices_eur", message)
-        producer.flush()
+        try:
+            producer.send("gold_prices_eur", message)
+            producer.flush()
+            print(f"✅ Sent price: {price} EUR at {message['timestamp']}", flush=True)
+        except Exception as e:
+            print(f"❌ Failed to send message to Kafka: {e}", flush=True)
 
     # each 5 minutes send the value 
+    print("⏳ Sleeping for 5 minutes...", flush=True)
     time.sleep(300)
