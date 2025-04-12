@@ -6,7 +6,7 @@ from kafka import KafkaProducer
 from datetime import datetime 
 
 
-producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
 
 def fetch_gold_price():
     url = "https://www.goldpreis.de/"
