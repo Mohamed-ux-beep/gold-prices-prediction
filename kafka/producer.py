@@ -10,7 +10,7 @@ def create_producer():
         try:
             producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
             print("✅ Connected to Kafka.")
-             return producer
+            return producer
          except Exception as e:
              print(f"❌ Kafka not ready, retrying in 5s... ({e})")
              time.sleep(5)

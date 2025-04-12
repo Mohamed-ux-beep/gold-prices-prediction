@@ -44,5 +44,4 @@ services:
       context: .
     depends_on:
       - kafka
-    command: ["sh", "-c", "python kafka/producer.py"]
-
+    command: ["python", "kafka/producer.py"]
