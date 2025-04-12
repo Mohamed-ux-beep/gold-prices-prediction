@@ -1,0 +1,39 @@
+import requests 
+from bs4 import BeautifulSoup
+import json 
+import time 
+from kafka import KafkaProducer 
+from datetime import datetime 
+
+
+producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
+
+def fetch_gold_price():
+    url = "https://www.goldpreis.de/"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    try:
+        response = requests.get(url, headers=headers)
+        soup = BeautifulSoup(response.text, "html.parser")
+        price_span = soup.find("span",  class_ = "au_gold_eur_o")
+        
+        if price_span: 
+            price_text = price_span.text.strip().replace(".", "").replace(",",".")
+            return float(price_text)
+    except:
+        return None
+
+    return None
+
+while True:
+    price = fetch_gold_price()
+    if price:
+        message = {
+                    "timestamp": datetime.utcnow().isoformat(),
+                    "price_eur": price
+                }
+        producer.send("gold_prices_eur", message)
+        producer.flush()
+
+    # each 5 minutes send the value 
+    time.sleep(300)

@@ -1,0 +1,10 @@
+kafka-python
+joblib 
+scikit-learn
+pandas 
+hydra-core
+omegaconf
+prometheus_client
+python-dotenv
+requests
+beautifulsoup4
