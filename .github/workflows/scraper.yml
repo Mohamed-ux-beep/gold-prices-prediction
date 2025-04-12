@@ -1,29 +1,21 @@
-name: Gold Price Producer
+name: Scrape and Send Gold Price
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # every 5 minutes
-  workflow_dispatch:       # allow manual trigger from GitHub UI
+    - cron: '*/5 * * * *'  # Every 5 minutes
+  workflow_dispatch:
 
 jobs:
-  run-producer:
+  send-price:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v3
-
-      - name: 🐍 Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-
-      - name: 📦 Install dependencies
+      - name: Send gold price to FastAPI
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: ▶️ Run producer
-        run: |
-          python kafka/producer.py
+          curl -X POST https://<your-app>.up.railway.app/send-price \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'",
+                  "price_eur": 1923.45
+                }'
 
