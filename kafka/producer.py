@@ -5,8 +5,17 @@ import time
 from kafka import KafkaProducer 
 from datetime import datetime 
 
+def create_producer():
+    while True:
+        try:
+            producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
+            print("✅ Connected to Kafka.")
+             return producer
+         except Exception as e:
+             print(f"❌ Kafka not ready, retrying in 5s... ({e})")
+             time.sleep(5)
 
-producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer= lambda v: json.dumps(v).encode('utf-8'))
+
 
 def fetch_gold_price():
     url = "https://www.goldpreis.de/"
@@ -26,6 +35,7 @@ def fetch_gold_price():
     return None
 
 while True:
+    producer = create_producer()
     price = fetch_gold_price()
     if price:
         message = {
