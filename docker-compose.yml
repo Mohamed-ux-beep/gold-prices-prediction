@@ -44,4 +44,4 @@ services:
       context: .
     depends_on:
       - kafka
-    command: ["python", "kafka/producer.py"]
+    restart: always
