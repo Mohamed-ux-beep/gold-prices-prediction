@@ -34,9 +34,10 @@ def fetch_gold_price():
 
     return None
 
+producer = create_producer()
+
 while True:
-    producer = create_producer()
-    price = fetch_gold_price()
+       price = fetch_gold_price()
     if price:
         message = {
                     "timestamp": datetime.utcnow().isoformat(),
