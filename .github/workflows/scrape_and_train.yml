@@ -28,15 +28,13 @@ jobs:
       - name: Run scraper and train if needed
         run: PYTHONPATH=. python app/run_scraper.py
 
-      - name: Configure git identity
-        run: |
-          git config --global user.name "Mohamed Abokahf"
-          git config --global user.email "mohamed.abokahf@student.hs-anhalt.de"
-
+  
       - name: Commit and push CSV
         env:
-          GH_PAT: ${{secrets.GOLD_PRICES_API}}
+          GH_PAT: ${{ secrets.GOLD_PRICES_API }}
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/gold_prices.csv
           git commit -m "Update gold price data [auto]" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
