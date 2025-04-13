@@ -1,5 +1,5 @@
 kafka-python
-joblib==1.2.0
+joblib --no-binary :all:
 scikit-learn
 pandas 
 hydra-core
