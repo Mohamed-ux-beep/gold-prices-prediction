@@ -1,4 +1,4 @@
-from app.utils import fetch_gold_price, save_to_csv
+from utils import fetch_gold_price, save_to_csv
 from datetime import datetime
 
 price = fetch_gold_price()
