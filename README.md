@@ -1,24 +1,4 @@
-gold-price-prediction/
-│
-├── app/
-│   ├── main.py              # FastAPI app: scraping, prediction, visualization
-│   ├── model.py             # load_model(), predict_price()
-│   ├── training.py          # train_model(), save_model()
-│   └── utils.py             # helper functions: fetch_gold_price(), save_to_csv()
-│
-├── data/
-│   └── gold_prices.csv      # records of gold prices (timestamp, price)
-│
-├── models/
-│   └── model.pkl            # trained ML model
-│
-├── .github/
-│   └── workflows/
-│       └── scraper.yml      # GitHub Action: scrapes gold price every 5 min
-│
-├── requirements.txt         # all Python dependencies
-├── Dockerfile               # for deploying FastAPI to Railway
-└── README.md                # project description
+# project description
 
 # Gold Price Prediction 📈
 
