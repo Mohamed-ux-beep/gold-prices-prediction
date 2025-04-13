@@ -35,7 +35,7 @@ jobs:
 
       - name: Commit and push CSV
         env:
-          GH_PAT: ${{ secrets.Gold_price_api }}
+          GH_PAT: ${{ secrets.GOLD_PRICES_API }}
         run: |
           git add data/gold_prices.csv
           git commit -m "Update gold price data [auto]" || echo "No changes to commit"
