@@ -1,5 +1,3 @@
-# project description
-
 # Gold Price Prediction 📈
 
 This project is a complete end-to-end machine learning system for predicting gold prices. It combines scraping, data storage, model training, prediction serving, and visualization — all deployed to the cloud and automated for 24/7 operation.
