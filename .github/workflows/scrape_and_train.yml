@@ -40,10 +40,14 @@ jobs:
         run: |
           git config --global user.name "Mohamed Abokahf"
           git config --global user.email "mohamed.abokahf@student.hs-anhalt.de"
-
+               
       - name: Commit and push CSV
+        env:
+          GH_PAT: ${{ secrets.GOLD_PRICES_API }}
         run: |
           git add data/gold_prices.csv
           git commit -m "Update gold price data [auto]" || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
           git push origin HEAD
+
 
