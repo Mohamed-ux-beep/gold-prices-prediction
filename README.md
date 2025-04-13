@@ -1,54 +1,83 @@
+```markdown
 # Gold Price Prediction 📈
 
-This project is a complete end-to-end machine learning system for predicting gold prices. It combines scraping, data storage, model training, prediction serving, and visualization — all deployed to the cloud and automated for 24/7 operation.
+This project is a **complete end-to-end machine learning pipeline** for real-time **gold price prediction**. It integrates **web scraping**, **data storage**, **ML model training**, **prediction serving**, and **visualization**, all deployed to the cloud and **automated for 24/7 operation**.
+
+---
 
 ## 🔧 Features
-- ✅ **FastAPI** backend deployed on Railway
-- 🔁 **GitHub Actions** job runs every 5 minutes to scrape gold price from [goldpreis.de](https://www.goldpreis.de)
-- 🧠 **Scikit-learn model** for predicting future gold prices
-- 🗂️ **CSV file** stores historical price data
-- 📊 **Interactive chart** endpoint for visualization
-- 🔮 `/predict` endpoint for live model inference
+
+- ✅ **FastAPI backend** deployed via **Railway**  
+- 🔁 **GitHub Actions** scheduled job scrapes gold prices every 5 minutes from [goldpreis.de](https://www.goldpreis.de)  
+- 🧠 **Scikit-learn** model predicts future gold prices  
+- 🗂️ **CSV-based historical data** storage  
+- 📊 Interactive **price chart** served via API  
+- 🔮 **Live prediction** with `/predict` endpoint  
+
+---
 
 ## 📁 Project Structure
+
 ```
 gold-price-prediction/
 ├── app/
-│   ├── main.py          # FastAPI API
-│   ├── model.py         # Prediction logic
-│   ├── training.py      # Model training
-│   └── utils.py         # Scraping and helpers
+│   ├── main.py             # FastAPI API
+│   ├── model.py            # Prediction logic
+│   ├── training.py         # Model training script
+│   ├── utils.py            # Scraper and utility functions
+│   └── run_scraper.py      # Script to run scraper + training
+├── configs/
+│   └── config.yaml         # Configuration file
+├── dashboard/
+│   ├── __init__.py         # Dashboard package init
+│   └── app.py              # Optional dashboard frontend
 ├── data/
-│   └── gold_prices.csv  # Saved scraped data
+│   └── gold_prices.csv     # Historical gold price data
 ├── models/
-│   └── model.pkl        # Trained model
-├── .github/workflows/
-│   └── scraper.yml      # GitHub Action: scrape & send price
+│   └── model.pkl           # Trained ML model
+├── .github/
+│   └── workflows/
+│       └── scrape_and_train.yml  # GitHub Actions workflow
 ├── requirements.txt
-├── Dockerfile
+├── Procfile                # For Railway deployment
 └── README.md
 ```
 
+---
+
 ## 🚀 Deployment
-- Backend: Railway (uses `Dockerfile` to deploy FastAPI app)
-- Scheduled Jobs: GitHub Actions (`scraper.yml`)
+
+- **Backend**: Deployed with Railway using `Procfile`  
+- **Scheduler**: GitHub Actions (`scrape_and_train.yml`) runs scraping + training every 5 minutes  
+
+---
 
 ## 🧠 Training the Model
+
 To train the model manually:
+
 ```bash
 python app/training.py
 ```
-This script reads from `data/gold_prices.csv`, trains a model, and saves it to `models/model.pkl`.
+
+- Reads historical data from `data/gold_prices.csv`  
+- Trains and saves model to `models/model.pkl`  
+
+---
 
 ## 🔌 API Endpoints
-| Endpoint       | Method | Description                             |
-|----------------|--------|-----------------------------------------|
-| `/`            | GET    | Service status                          |
-| `/send-price`  | POST   | Scrapes & stores gold price             |
-| `/predict`     | GET    | Returns the predicted next price        |
-| `/chart`       | GET    | Displays a plot of price history        |
 
-## 🧪 Example Response
+| Endpoint       | Method | Description                          |
+|----------------|--------|--------------------------------------|
+| `/`            | GET    | Service health/status check          |
+| `/send-price`  | POST   | Scrapes and stores latest gold price |
+| `/predict`     | GET    | Predicts the next gold price         |
+| `/chart`       | GET    | Displays interactive price history   |
+
+---
+
+## 🧪 Example Prediction Response
+
 ```json
 {
   "timestamp": "2025-04-13T10:00:00Z",
@@ -57,20 +86,35 @@ This script reads from `data/gold_prices.csv`, trains a model, and saves it to `
 }
 ```
 
-## 🤖 GitHub Action Workflow
-Located in `.github/workflows/scraper.yml` — it:
-- Runs every 5 minutes
-- Scrapes gold price
-- Sends it to `/send-price`
+---
+
+## 🤖 GitHub Actions Workflow
+
+**Path**: `.github/workflows/scrape_and_train.yml`
+
+- 🕐 Runs every 5 minutes  
+- 🌐 Scrapes the current gold price  
+- 🧠 Triggers model training  
+- 📬 Sends data to the `/send-price` endpoint  
+
+---
 
 ## 📦 Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## 🙌 Credits
-Built with ❤️ using FastAPI, scikit-learn, GitHub Actions, Railway.
+---
+
+## 🙌 Contributors
+
+Built with ❤️ by:
+
+- **Mohamed Abokahf**  
+- **Mohamed Sayed Noureldih Elsayed**  
+- **Ferass Alrawashdh**
 
 ---
-> Ready to scale up with real-time ML workflows and 24/7 deployment!
+```
 
