@@ -28,14 +28,17 @@ jobs:
       - name: Run scraper and train if needed
         run: PYTHONPATH=. python app/run_scraper.py
 
-      - name: Commit and push CSV
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh -y
+
+      - name: Authenticate with GitHub CLI
         env:
           GH_PAT: ${{ secrets.GOLD_PRICES_API }}
+        run: echo "${GH_PAT}" | gh auth login --with-token
+
+      - name: Commit and push CSV
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/gold_prices.csv
           git commit -m "Update gold price data [auto]" || echo "No changes to commit"
-          git remote set-url origin https://${GH_PAT}@github.com/${{ github.repository }}
-          git push
+          git push origin HEAD
 
