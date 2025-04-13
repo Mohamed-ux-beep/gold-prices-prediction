@@ -1,76 +1,98 @@
-# 📈 Gold Price Prediction Pipeline
+gold-price-prediction/
+│
+├── app/
+│   ├── main.py              # FastAPI app: scraping, prediction, visualization
+│   ├── model.py             # load_model(), predict_price()
+│   ├── training.py          # train_model(), save_model()
+│   └── utils.py             # helper functions: fetch_gold_price(), save_to_csv()
+│
+├── data/
+│   └── gold_prices.csv      # records of gold prices (timestamp, price)
+│
+├── models/
+│   └── model.pkl            # trained ML model
+│
+├── .github/
+│   └── workflows/
+│       └── scraper.yml      # GitHub Action: scrapes gold price every 5 min
+│
+├── requirements.txt         # all Python dependencies
+├── Dockerfile               # for deploying FastAPI to Railway
+└── README.md                # project description
 
-This project provides a fully automated pipeline for scraping real-time gold prices, publishing them to Kafka, and optionally predicting future prices using a machine learning model. It's built with Python, Kafka, Docker, and integrated with GitLab CI/CD for continuous execution.
+# Gold Price Prediction 📈
 
-## 🚀 Features
+This project is a complete end-to-end machine learning system for predicting gold prices. It combines scraping, data storage, model training, prediction serving, and visualization — all deployed to the cloud and automated for 24/7 operation.
 
-- Scrapes live gold price from trusted websites
-- Sends price data to a Kafka topic every 5 minutes
-- Automatically runs via GitLab CI/CD pipeline
-- Ready for deployment using Docker or on cloud platforms
-- Supports cloudflared/ngrok for public Kafka access
-- Flexible to integrate prediction, monitoring, and retraining
+## 🔧 Features
+- ✅ **FastAPI** backend deployed on Railway
+- 🔁 **GitHub Actions** job runs every 5 minutes to scrape gold price from [goldpreis.de](https://www.goldpreis.de)
+- 🧠 **Scikit-learn model** for predicting future gold prices
+- 🗂️ **CSV file** stores historical price data
+- 📊 **Interactive chart** endpoint for visualization
+- 🔮 `/predict` endpoint for live model inference
 
-## 🛠 Technologies
-
-- Python 3.11
-- Apache Kafka & Zookeeper
-- Kafka UI (for inspecting topics)
-- BeautifulSoup + Requests
-- GitLab CI/CD
-- Docker & docker-compose
-- (Optional) Prometheus, Grafana, n8n
-
-## ⚙️ How to Run Everything Locally (One Cell)
-
-```bash
-# ✅ 1. Clone the project
-git clone https://gitlab.com/your-username/gold-price-prediction.git
-cd gold-price-prediction
-
-# ✅ 2. Start Kafka, Zookeeper, and Kafka UI
-docker-compose down
-docker-compose up -d
-
-# ✅ 3. Create and activate virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# ✅ 4. Install Python dependencies
-pip install -r requirements.txt
-
-# ✅ 5. Run the Kafka producer (scraper)
-python kafka/producer.py
+## 📁 Project Structure
+```
+gold-price-prediction/
+├── app/
+│   ├── main.py          # FastAPI API
+│   ├── model.py         # Prediction logic
+│   ├── training.py      # Model training
+│   └── utils.py         # Scraping and helpers
+├── data/
+│   └── gold_prices.csv  # Saved scraped data
+├── models/
+│   └── model.pkl        # Trained model
+├── .github/workflows/
+│   └── scraper.yml      # GitHub Action: scrape & send price
+├── requirements.txt
+├── Dockerfile
+└── README.md
 ```
 
-## ☁️ Running with GitLab CI/CD
+## 🚀 Deployment
+- Backend: Railway (uses `Dockerfile` to deploy FastAPI app)
+- Scheduled Jobs: GitHub Actions (`scraper.yml`)
 
-1. Push your project to GitLab  
-2. Make sure `.gitlab-ci.yml` is in the project root  
-3. Go to **CI/CD → Schedules** and add a new schedule:  
-   - Cron: `*/5 * * * *`  
-   - Branch: `main`  
-4. Your scraper will now run automatically every 5 minutes
+## 🧠 Training the Model
+To train the model manually:
+```bash
+python app/training.py
+```
+This script reads from `data/gold_prices.csv`, trains a model, and saves it to `models/model.pkl`.
 
-✅ Make sure Kafka is accessible from GitLab (via public IP, cloudflared, or Confluent Cloud).
+## 🔌 API Endpoints
+| Endpoint       | Method | Description                             |
+|----------------|--------|-----------------------------------------|
+| `/`            | GET    | Service status                          |
+| `/send-price`  | POST   | Scrapes & stores gold price             |
+| `/predict`     | GET    | Returns the predicted next price        |
+| `/chart`       | GET    | Displays a plot of price history        |
 
-## 🌐 Kafka Access Options
+## 🧪 Example Response
+```json
+{
+  "timestamp": "2025-04-13T10:00:00Z",
+  "price_eur": 2850.27,
+  "prediction": 2861.45
+}
+```
 
-To allow the GitLab runner to send messages to Kafka, use one of the following:
+## 🤖 GitHub Action Workflow
+Located in `.github/workflows/scraper.yml` — it:
+- Runs every 5 minutes
+- Scrapes gold price
+- Sends it to `/send-price`
 
-- [Cloudflared](https://developers.cloudflare.com/cloudflared/) tunnel to expose `localhost:9092`
-- [Confluent Cloud](https://confluent.io) – free managed Kafka service
-- Deploy your Kafka broker to Render, Railway, or any public cloud VM
+## 📦 Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-## ✅ Next Steps (Optional Ideas)
+## 🙌 Credits
+Built with ❤️ using FastAPI, scikit-learn, GitHub Actions, Railway.
 
-- Add consumer logic and ML model for forecasting  
-- Train model automatically on latest data  
-- Add FastAPI service for real-time predictions  
-- Monitor data & model metrics using Grafana + Prometheus  
-- Automate workflows using n8n
-
-## 📄 License
-
-This project is intended for educational and research use. Contributions are welcome!
+---
+> Ready to scale up with real-time ML workflows and 24/7 deployment!
 
