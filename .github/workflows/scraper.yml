@@ -39,7 +39,7 @@ jobs:
                   }
 
                   res = requests.post(
-                      "https://gold-price-prediction.up.railway.app/send-price",
+                      "https://gold-prices-prediction.up.railway.app/send-price",
                       headers={"Content-Type": "application/json"},
                       data=json.dumps(data)
                   )
