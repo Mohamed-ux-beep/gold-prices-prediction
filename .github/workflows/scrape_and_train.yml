@@ -5,7 +5,7 @@ name: Scrape Gold Price and Trigger Training
 on:
   schedule:
     - cron: '*/5 * * * *'  # every 5 minutes
-  workflow_dispatch:       # allow manual trigger
+  workflow_dispatch:
 
 jobs:
   scrape-and-check:
@@ -27,7 +27,7 @@ jobs:
 
       - name: Scrape gold price and append
         run: |
-          python -c """
+          python - <<EOF
 import os
 import json
 import requests
@@ -62,5 +62,5 @@ if span:
         os.system('python app/training.py')
 else:
     print('❌ Price not found')
-          """
+EOF
 
