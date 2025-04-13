@@ -1,4 +1,4 @@
-  # .github/workflows/scrape_and_train.yml
+# .github/workflows/scrape_and_train.yml
 
 name: Scrape Gold Price and Trigger Training
 
@@ -25,43 +25,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Scrape gold price and append
-        shell: bash
+      - name: Run scraper and train if needed
         run: |
-          echo "import os
-import json
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime
-import pandas as pd
+          python utils.py
 
-url = 'https://www.goldpreis.de/'
-headers = {'User-Agent': 'Mozilla/5.0'}
-response = requests.get(url, headers=headers)
-soup = BeautifulSoup(response.text, 'html.parser')
-span = soup.find('span', class_='au_gold_eur_o')
-
-if span:
-    price_text = span.text.strip().replace('.', '').replace(',', '.')
-    price = float(price_text)
-    timestamp = datetime.utcnow().isoformat()
-    df = pd.DataFrame([[timestamp, price]], columns=['timestamp', 'price_eur'])
-    path = 'data/gold_prices.csv'
-    os.makedirs('data', exist_ok=True)
-    if os.path.exists(path):
-        df.to_csv(path, mode='a', header=False, index=False)
-    else:
-        df.to_csv(path, mode='w', header=True, index=False)
-
-    print(f'✅ Saved: {price} EUR at {timestamp}')
-
-    df_full = pd.read_csv(path)
-    if len(df_full) == 1000:
-        print('📈 Reached 1000 rows, training...')
-        os.environ['MODEL_NAME_OVERRIDE'] = f"xgboost_{datetime.now().strftime('%Y%m%d')}.pkl"
-        os.system('python app/training.py')
-else:
-    print('❌ Price not found')" > run_scraper.py
-
-          python run_scraper.py
 
