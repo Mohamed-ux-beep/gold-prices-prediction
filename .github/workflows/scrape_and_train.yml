@@ -40,7 +40,7 @@ jobs:
         run: |
           git config --global user.name "Mohamed Abokahf"
           git config --global user.email "mohamed.abokahf@student.hs-anhalt.de"
-               
+
       - name: Commit and push CSV
         env:
           GH_PAT: ${{ secrets.GOLD_PRICES_API }}
