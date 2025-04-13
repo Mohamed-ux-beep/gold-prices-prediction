@@ -4,29 +4,12 @@ from bs4 import BeautifulSoup
 import json
 import time
 from kafka import KafkaProducer
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import FastAPI
 
 app = FastAPI()
 
-# Read the Kafka broker from environment variable, default to 'localhost:9092' if not set
 KAFKA_BROKER = os.getenv("KAFKA_BROKER", "kafka:9092")
-
-def create_producer():
-    while True:
-        try:
-            print(f"⏳ Trying to connect to Kafka at {KAFKA_BROKER}...", flush=True)
-            producer = KafkaProducer(
-                bootstrap_servers=KAFKA_BROKER,
-                value_serializer=lambda v: json.dumps(v).encode('utf-8')
-            )
-            print("✅ Connected to Kafka.", flush=True)
-            return producer
-        except Exception as e:
-            print(f"❌ Kafka not ready, retrying in 5s... ({e})", flush=True)
-            time.sleep(5)
-
-producer = create_producer()
 
 def fetch_gold_price():
     url = "https://www.goldpreis.de/"
@@ -46,6 +29,21 @@ def fetch_gold_price():
 
     return None
 
+def create_producer():
+    for _ in range(5):
+        try:
+            print(f"⏳ Trying to connect to Kafka at {KAFKA_BROKER}...", flush=True)
+            producer = KafkaProducer(
+                bootstrap_servers=KAFKA_BROKER,
+                value_serializer=lambda v: json.dumps(v).encode('utf-8')
+            )
+            print("✅ Connected to Kafka.", flush=True)
+            return producer
+        except Exception as e:
+            print(f"❌ Kafka not ready, retrying in 5s... ({e})", flush=True)
+            time.sleep(5)
+    return None
+
 @app.get("/")
 def root():
     return {"status": "Gold price producer is running 🚀"}
@@ -55,9 +53,14 @@ def send_price():
     price = fetch_gold_price()
     if price:
         message = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "price_eur": price
         }
+
+        producer = create_producer()
+        if not producer:
+            return {"status": "❌ Kafka not available"}
+
         try:
             producer.send("gold_prices_eur", message)
             producer.flush()
@@ -67,5 +70,6 @@ def send_price():
             print(f"❌ Failed to send message to Kafka: {e}", flush=True)
             return {"status": "failed", "error": str(e)}
     return {"status": "no_price"}
+
 
 
