@@ -1,0 +1,9 @@
+models:
+  - name: xgboost_model
+    type: xgboost
+  - name: linear_model
+    type: linear
+
+paths:
+  data: data/gold_prices.csv
+  models: models
