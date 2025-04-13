@@ -39,9 +39,9 @@ jobs:
                   }
 
                   res = requests.post(
-                      "https://gold-prices-prediction.up.railway.app/send-price",
-                      headers={"Content-Type": "application/json"},
-                      data=json.dumps(data)
+                           "https://gold-prices-prediction-production.up.railway.app/send-price",
+                           headers={"Content-Type": "application/json"},
+                           data=json.dumps(data)
                   )
 
                   print("✅ Sent to FastAPI:", data)
