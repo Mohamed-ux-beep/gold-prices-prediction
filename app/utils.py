@@ -7,7 +7,7 @@ import pandas as pd
 import subprocess
 from omegaconf import OmegaConf
 
-CONFIG_PATH = "config/config.yaml"
+CONFIG_PATH = "configs/config.yaml"
 
 
 def fetch_gold_price():
