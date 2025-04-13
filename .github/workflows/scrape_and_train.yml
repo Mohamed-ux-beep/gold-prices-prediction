@@ -26,7 +26,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run scraper and train if needed
-        run: |
-          python app/run_scraper.py
+        run: PYTHONPATH=. python app/run_scraper.py
 
 
