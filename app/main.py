@@ -10,7 +10,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 # Read the Kafka broker from environment variable, default to 'localhost:9092' if not set
-KAFKA_BROKER = os.getenv("KAFKA_BROKER", "localhost:9092")
+KAFKA_BROKER = os.getenv("KAFKA_BROKER", "kafka:9092")
 
 def create_producer():
     while True:
