@@ -36,6 +36,11 @@ jobs:
           GH_PAT: ${{ secrets.GOLD_PRICES_API }}
         run: echo "${GH_PAT}" | gh auth login --with-token
 
+      - name: Configure git identity
+        run: |
+          git config --global user.name "Mohamed Abokahf"
+          git config --global user.email "mohamed.abokahf@student.hs-anhalt.de"
+
       - name: Commit and push CSV
         run: |
           git add data/gold_prices.csv
