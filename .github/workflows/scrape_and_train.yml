@@ -27,6 +27,6 @@ jobs:
 
       - name: Run scraper and train if needed
         run: |
-          python utils.py
+          python app/utils.py
 
 
