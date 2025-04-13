@@ -37,7 +37,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/gold_prices.csv
           git commit -m "Update gold price data [auto]" || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/Mohamed-ux-beep/gold-prices-prediction.git
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
           git push origin HEAD
 
 
