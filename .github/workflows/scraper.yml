@@ -1,0 +1,54 @@
+name: Scrape and Send Gold Price
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # Every 5 minutes
+  workflow_dispatch:         # Allow manual trigger from GitHub UI
+
+jobs:
+  send-real-gold-price:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Python dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Scrape gold price and send to FastAPI
+        run: |
+          python3 - <<EOF
+          import requests
+          from bs4 import BeautifulSoup
+          from datetime import datetime
+          import json
+
+          try:
+              url = "https://www.goldpreis.de/"
+              headers = {"User-Agent": "Mozilla/5.0"}
+              response = requests.get(url, headers=headers)
+              soup = BeautifulSoup(response.text, "html.parser")
+              price_span = soup.find("span", class_="au_gold_eur_o")
+
+              if price_span:
+                  price_text = price_span.text.strip().replace(".", "").replace(",", ".")
+                  price = float(price_text)
+                  
+                  data = {
+                      "timestamp": datetime.utcnow().isoformat(),
+                      "price_eur": price
+                  }
+
+                  res = requests.post(
+                      "https://gold-price-prediction.up.railway.app/send-price",
+                      headers={"Content-Type": "application/json"},
+                      data=json.dumps(data)
+                  )
+
+                  print("✅ Sent to FastAPI:", data)
+                  print("🔁 Response:", res.status_code, res.text)
+              else:
+                  print("❌ Price span not found.")
+          except Exception as e:
+              print("❌ Error:", str(e))
+          EOF
+

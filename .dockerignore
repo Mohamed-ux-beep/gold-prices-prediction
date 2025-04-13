@@ -1,0 +1,30 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+
+# System files
+.DS_Store
+
+# Git and GitHub
+.git/
+.gitignore
+.github/
+
+# Editor/project files
+*.swp
+*.swo
+*.log
+*.idea/
+*.vscode/
+
+# Node/npm (if any frontend gets added)
+node_modules/
+
+# Tests
+tests/
+
