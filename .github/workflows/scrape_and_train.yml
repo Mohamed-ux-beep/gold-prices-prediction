@@ -1,4 +1,4 @@
-# .github/workflows/scrape_and_train.yml
+  # .github/workflows/scrape_and_train.yml
 
 name: Scrape Gold Price and Trigger Training
 
@@ -26,9 +26,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Scrape gold price and append
+        shell: bash
         run: |
-          python - <<EOF
-import os
+          echo "import os
 import json
 import requests
 from bs4 import BeautifulSoup
@@ -61,6 +61,7 @@ if span:
         os.environ['MODEL_NAME_OVERRIDE'] = f"xgboost_{datetime.now().strftime('%Y%m%d')}.pkl"
         os.system('python app/training.py')
 else:
-    print('❌ Price not found')
-EOF
+    print('❌ Price not found')" > run_scraper.py
+
+          python run_scraper.py
 
