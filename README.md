@@ -18,30 +18,28 @@ This project is a **complete end-to-end machine learning pipeline** for real-tim
 
 ## 📁 Project Structure
 
-```
-gold-price-prediction/
-├── app/
-│   ├── main.py             # FastAPI API
-│   ├── model.py            # Prediction logic
-│   ├── training.py         # Model training script
-│   ├── utils.py            # Scraper and utility functions
-│   └── run_scraper.py      # Script to run scraper + training
-├── configs/
-│   └── config.yaml         # Configuration file
-├── dashboard/
-│   ├── __init__.py         # Dashboard package init
-│   └── app.py              # Optional dashboard frontend
-├── data/
-│   └── gold_prices.csv     # Historical gold price data
-├── models/
-│   └── model.pkl           # Trained ML model
-├── .github/
-│   └── workflows/
-│       └── scrape_and_train.yml  # GitHub Actions workflow
-├── requirements.txt
-├── Procfile                # For Railway deployment
-└── README.md
-```
+    gold-price-prediction/
+    ├── app/
+    │   ├── main.py             # FastAPI API
+    │   ├── model.py            # Prediction logic
+    │   ├── training.py         # Model training script
+    │   ├── utils.py            # Scraper and utility functions
+    │   └── run_scraper.py      # Script to run scraper + training
+    ├── configs/
+    │   └── config.yaml         # Configuration file
+    ├── dashboard/
+    │   ├── __init__.py         # Dashboard package init
+    │   └── app.py              # Optional dashboard frontend
+    ├── data/
+    │   └── gold_prices.csv     # Historical gold price data
+    ├── models/
+    │   └── model.pkl           # Trained ML model
+    ├── .github/
+    │   └── workflows/
+    │       └── scrape_and_train.yml  # GitHub Actions workflow
+    ├── requirements.txt
+    ├── Procfile                # For Railway deployment
+    └── README.md
 
 ---
 
